@@ -44,6 +44,7 @@ public class RušenjeZida extends Application {
         
         primaryStage.setTitle("Rušenje zida");
         primaryStage.setResizable(false);
+        primaryStage.sizeToScene();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
