@@ -25,7 +25,10 @@ public class Udarač extends Sprite implements Odbijajući{
         
     }
     
-    public void pomeri(MouseEvent d){
-        setTranslateX(d.getSceneX()-početnoX);
+    public void pomeri(MouseEvent d, double levaGranica, double desnaGranica){
+        double novoX=d.getSceneX();
+        if(novoX-oblik.getWidth()/2<levaGranica) novoX=levaGranica+oblik.getWidth()/2;
+        if(novoX+oblik.getWidth()/2>desnaGranica) novoX=desnaGranica-oblik.getWidth()/2;
+        setTranslateX(novoX-početnoX);
     }
 }

@@ -19,9 +19,12 @@ public class RušenjeZida extends Application {
             BROJ_BLOKOVA_U_KOLONI=6;
     public static final double ŠIRINA_BLOKA=30,
             VISINA_BLOKA=15,
-            ŠIRINA_PROZORA=480,
-            VISINA_PROZORA=640;
-            
+            /*ŠIRINA_PROZORA=480,
+            VISINA_PROZORA=640,
+            ŠIRINA_ZIDA=(ŠIRINA_PROZORA-ŠIRINA_BLOKA*BROJ_BLOKOVA_U_REDU)/2;*/
+            ŠIRINA_ZIDA=20,
+            ŠIRINA_PROZORA=ŠIRINA_ZIDA*2+ŠIRINA_BLOKA*BROJ_BLOKOVA_U_REDU,
+            VISINA_PROZORA=480;
     public static final Color[] BOJE={Color.GREY,Color.PURPLE, Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED};
     
     private class Tajmer extends AnimationTimer{
@@ -43,9 +46,9 @@ public class RušenjeZida extends Application {
         pozadina.setFill(p);
         glavnaGrupa.getChildren().add(pozadina);
         
-        Zid leviZid=new Zid(0, 0, 10, VISINA_PROZORA, Color.GRAY),
-                desniZid=new Zid(ŠIRINA_PROZORA-10, 0, 10, VISINA_PROZORA, Color.GRAY),
-                gornjiZid=new Zid(0, 0, ŠIRINA_PROZORA, 10, Color.GRAY);
+        Zid leviZid=new Zid(0, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY),
+                desniZid=new Zid(ŠIRINA_PROZORA-ŠIRINA_ZIDA, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY),
+                gornjiZid=new Zid(0, 0, ŠIRINA_PROZORA, ŠIRINA_ZIDA, Color.GRAY);
         glavnaGrupa.getChildren().addAll(leviZid, desniZid, gornjiZid);
         
         Group grupaBlokova = new Group();
@@ -56,13 +59,15 @@ public class RušenjeZida extends Application {
             grupaBlokova.getChildren().add(blokovi[i]);
         }
         glavnaGrupa.getChildren().add(grupaBlokova);
+        grupaBlokova.setTranslateY(VISINA_BLOKA*5);
+        grupaBlokova.setTranslateX(ŠIRINA_ZIDA);
         
-        Udarač udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_PROZORA*0.9, 100, 20, Color.ORANGE);
+        Udarač udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_PROZORA*0.9, 100, VISINA_BLOKA, Color.ORANGE);
         glavnaGrupa.getChildren().add(udarač);
         
         Scene scene = new Scene(glavnaGrupa, ŠIRINA_PROZORA, VISINA_PROZORA);
         
-        glavnaGrupa.setOnMouseMoved(d -> udarač.pomeri(d));
+        glavnaGrupa.setOnMouseMoved(d -> udarač.pomeri(d, ŠIRINA_ZIDA, ŠIRINA_PROZORA-ŠIRINA_ZIDA));
         
         primaryStage.setTitle("Rušenje zida");
         primaryStage.setResizable(false);
