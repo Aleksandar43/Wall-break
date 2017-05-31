@@ -65,6 +65,9 @@ public class RušenjeZida extends Application {
         Udarač udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_PROZORA*0.9, 100, VISINA_BLOKA, Color.ORANGE);
         glavnaGrupa.getChildren().add(udarač);
         
+        Lopta lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_PROZORA*0.9-10, 10, Color.BLACK);
+        glavnaGrupa.getChildren().add(lopta);
+        
         Scene scene = new Scene(glavnaGrupa, ŠIRINA_PROZORA, VISINA_PROZORA);
         
         glavnaGrupa.setOnMouseMoved(d -> udarač.pomeri(d, ŠIRINA_ZIDA, ŠIRINA_PROZORA-ŠIRINA_ZIDA));

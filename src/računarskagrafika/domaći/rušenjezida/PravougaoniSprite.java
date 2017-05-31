@@ -4,7 +4,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class PravougaoniSprite extends Sprite{
-    private Rectangle okvir;
+    protected Rectangle okvir;
     public PravougaoniSprite(double x, double y, double širina, double visina, Paint boja){
         okvir=new Rectangle(x, y, širina, visina);
         okvir.setFill(boja);
@@ -14,5 +14,9 @@ public class PravougaoniSprite extends Sprite{
     public PravougaoniSprite(double x, double y, double širina, double visina){
         okvir=new Rectangle(x, y, širina, visina);
         getChildren().add(okvir);
+    }
+
+    public Rectangle getOkvir() {
+        return okvir;
     }
 }

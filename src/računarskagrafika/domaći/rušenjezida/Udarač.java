@@ -4,19 +4,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-public class Udarač extends Sprite implements Odbijajući{
-    private Rectangle oblik;
+public class Udarač extends PravougaoniSprite implements Odbijajući{
     private double početnoX;
     public Udarač(double x, double y, double širina, double visina, Paint boja) {
-        oblik=new Rectangle(x, y, širina, visina);
-        oblik.setFill(boja);
-        getChildren().add(oblik);
+        super(x, y, širina, visina, boja);
         početnoX=x+širina/2;
     }
 
     public Udarač(double x, double y, double širina, double visina) {
-        oblik=new Rectangle(x, y, širina, visina);
-        getChildren().add(oblik);
+        super(x, y, širina, visina);
         početnoX=x+širina/2;
     }
 
@@ -27,8 +23,8 @@ public class Udarač extends Sprite implements Odbijajući{
     
     public void pomeri(MouseEvent d, double levaGranica, double desnaGranica){
         double novoX=d.getSceneX();
-        if(novoX-oblik.getWidth()/2<levaGranica) novoX=levaGranica+oblik.getWidth()/2;
-        if(novoX+oblik.getWidth()/2>desnaGranica) novoX=desnaGranica-oblik.getWidth()/2;
+        if(novoX-okvir.getWidth()/2<levaGranica) novoX=levaGranica+okvir.getWidth()/2;
+        if(novoX+okvir.getWidth()/2>desnaGranica) novoX=desnaGranica-okvir.getWidth()/2;
         setTranslateX(novoX-početnoX);
     }
 }
