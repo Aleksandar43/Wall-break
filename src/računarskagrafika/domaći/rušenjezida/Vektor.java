@@ -25,8 +25,8 @@ public class Vektor {
     }
     
     public Vektor saberi(Vektor v){
-        x=v.x;
-        y=v.y;
+        x+=v.x;
+        y+=v.y;
         return this;
     }
     

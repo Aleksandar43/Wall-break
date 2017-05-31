@@ -27,10 +27,15 @@ public class RušenjeZida extends Application {
             VISINA_PROZORA=480;
     public static final Color[] BOJE={Color.GREY,Color.PURPLE, Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED};
     
+    private Group glavnaGrupa,grupaBlokova;
+    private Blok[] blokovi;
+    private Udarač udarač;
+    private Lopta lopta;
+    
     private class Tajmer extends AnimationTimer{
         @Override
         public void handle(long now) {
-            
+            lopta.pomeri();
         }
     }
     
@@ -38,7 +43,7 @@ public class RušenjeZida extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Group glavnaGrupa=new Group();
+        glavnaGrupa=new Group();
         
         ImagePattern p=new ImagePattern(new Image("crteži/bg.png"), 0, 0, 40, 40, false);
         
@@ -51,8 +56,8 @@ public class RušenjeZida extends Application {
                 gornjiZid=new Zid(0, 0, ŠIRINA_PROZORA, ŠIRINA_ZIDA, Color.GRAY);
         glavnaGrupa.getChildren().addAll(leviZid, desniZid, gornjiZid);
         
-        Group grupaBlokova = new Group();
-        Blok[] blokovi = new Blok[BROJ_BLOKOVA_U_REDU*BROJ_BLOKOVA_U_KOLONI];
+        grupaBlokova = new Group();
+        blokovi = new Blok[BROJ_BLOKOVA_U_REDU*BROJ_BLOKOVA_U_KOLONI];
         for(int i=0;i<blokovi.length;i++){
             blokovi[i]=new Blok((i%BROJ_BLOKOVA_U_REDU)*ŠIRINA_BLOKA, (i/BROJ_BLOKOVA_U_REDU)*VISINA_BLOKA,
                     ŠIRINA_BLOKA, VISINA_BLOKA, BOJE[i/BROJ_BLOKOVA_U_REDU]);
@@ -62,15 +67,17 @@ public class RušenjeZida extends Application {
         grupaBlokova.setTranslateY(VISINA_BLOKA*5);
         grupaBlokova.setTranslateX(ŠIRINA_ZIDA);
         
-        Udarač udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_PROZORA*0.9, 100, VISINA_BLOKA, Color.ORANGE);
+        udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_PROZORA*0.9, 100, VISINA_BLOKA, Color.ORANGE);
         glavnaGrupa.getChildren().add(udarač);
         
-        Lopta lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_PROZORA*0.9-10, 10, Color.BLACK);
+        lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_PROZORA*0.9-10, 10, Color.BLACK);
+        lopta.setUdarač(udarač);
         glavnaGrupa.getChildren().add(lopta);
         
         Scene scene = new Scene(glavnaGrupa, ŠIRINA_PROZORA, VISINA_PROZORA);
         
         glavnaGrupa.setOnMouseMoved(d -> udarač.pomeri(d, ŠIRINA_ZIDA, ŠIRINA_PROZORA-ŠIRINA_ZIDA));
+        glavnaGrupa.setOnMouseClicked(d -> lopta.pokreni());
         
         primaryStage.setTitle("Rušenje zida");
         primaryStage.setResizable(false);
