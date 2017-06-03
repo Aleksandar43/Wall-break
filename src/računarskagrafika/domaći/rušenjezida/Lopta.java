@@ -1,8 +1,12 @@
 package računarskagrafika.domaći.rušenjezida;
 
+import java.util.ArrayList;
+import java.util.List;
+import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 
 public class Lopta extends Sprite{
     private static final double BRZINA=2;
@@ -13,27 +17,57 @@ public class Lopta extends Sprite{
     
     public Lopta(double x, double y, double r, Paint boja){
         oblik=new Circle(r, boja);
-        oblik.setStroke(Color.WHITE);
+        //oblik.setStroke(Color.WHITE);
         oblik.setTranslateX(x);
         oblik.setTranslateY(y);
         getChildren().add(oblik);
     }
     
-    public void pomeri(){
+    public void pomeri(List<Odbijajući> odbijajućiObjekti, double protekloVreme){
         if(pokrenuta){
-            pozicija.saberi(brzina);
+            pozicija.setX(pozicija.getX()+brzina.getX()*protekloVreme);
+            pozicija.setY(pozicija.getY()+brzina.getY()*protekloVreme);
+            boolean obrniBrzinuX=false,obrniBrzinuY=false;
+            for(Odbijajući oo : new ArrayList<Odbijajući>(odbijajućiObjekti)){
+                Shape o=oo.getOblik();
+                Shape presek = Shape.intersect(o, oblik);
+                if (presek.getBoundsInLocal().getWidth() != -1) {
+                    Bounds granica = presek.getBoundsInParent();
+                    if (presek.getBoundsInLocal().getWidth() < presek.getBoundsInLocal().getHeight()) {
+                        obrniBrzinuX = true;
+                        if(brzina.getX()>0){
+                            pozicija.setX(2*(granica.getMinX()-oblik.getRadius())-pozicija.getX());
+                        } else {
+                            pozicija.setX(2*(granica.getMaxX()+oblik.getRadius())-pozicija.getX());
+                        }
+                    } else {
+                        obrniBrzinuY = true;
+                        if(brzina.getY()>0){
+                            pozicija.setY(2*(granica.getMinY()-oblik.getRadius())-pozicija.getY());
+                        } else {
+                            pozicija.setY(2*(granica.getMaxY()+oblik.getRadius())-pozicija.getY());
+                        }
+                    }
+                    if(oo instanceof Blok) odbijajućiObjekti.remove(oo);
+                }
+            }
             oblik.setTranslateX(pozicija.getX());
             oblik.setTranslateY(pozicija.getY());
-        } else{
+            if(obrniBrzinuX) brzina.setX(-brzina.getX());
+            if(obrniBrzinuY) brzina.setY(-brzina.getY());
+
+            } else{
             oblik.setTranslateX(udarač.getTranslateX()+udarač.getOkvir().getWidth()/2+udarač.getOkvir().getX());
         }
     }
     
     public void pokreni(){
-        pozicija=new Vektor(oblik.getTranslateX(), oblik.getTranslateY());
-        double ugao=(2*Math.PI)/360*(Math.random()*120+210);
-        brzina=new Vektor(BRZINA*Math.cos(ugao), BRZINA*Math.sin(ugao));
-        pokrenuta=true;
+        if (!pokrenuta) {
+            pozicija = new Vektor(oblik.getTranslateX(), oblik.getTranslateY());
+            double ugao = (2 * Math.PI) / 360 * (Math.random() * 120 + 210);
+            brzina = new Vektor(BRZINA * Math.cos(ugao), BRZINA * Math.sin(ugao));
+            pokrenuta = true;
+        }
     }
 
     public Udarač getUdarač() {

@@ -1,8 +1,10 @@
 package računarskagrafika.domaći.rušenjezida;
 
+import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class Blok extends PravougaoniSprite implements Odbijajući{
     private Rectangle oblik;
@@ -22,9 +24,9 @@ public class Blok extends PravougaoniSprite implements Odbijajući{
         oblik.setStroke(Color.BLACK);
         getChildren().add(oblik);
     }
-    
+
     @Override
-    public void odbijanje() {
-        //blok treba da nestane
+    public Shape getOblik() {
+        return okvir;
     }
 }

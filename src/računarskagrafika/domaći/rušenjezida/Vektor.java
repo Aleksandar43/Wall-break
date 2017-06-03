@@ -36,7 +36,7 @@ public class Vektor {
         return this;
     }
     
-    public static Vektor sabiranje(Vektor v1, Vektor v2){
+    public static Vektor zbir(Vektor v1, Vektor v2){
         return new Vektor(v1.x+v2.x, v1.y+v2.y);
     }
 }

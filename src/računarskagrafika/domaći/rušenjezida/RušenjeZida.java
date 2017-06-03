@@ -3,6 +3,9 @@
  */
 package računarskagrafika.domaći.rušenjezida;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -24,18 +27,23 @@ public class RušenjeZida extends Application {
             ŠIRINA_ZIDA=(ŠIRINA_PROZORA-ŠIRINA_BLOKA*BROJ_BLOKOVA_U_REDU)/2;*/
             ŠIRINA_ZIDA=20,
             ŠIRINA_PROZORA=ŠIRINA_ZIDA*2+ŠIRINA_BLOKA*BROJ_BLOKOVA_U_REDU,
-            VISINA_PROZORA=480;
+            VISINA_PROZORA=480,
+            POLUPREČNIK_LOPTE=10;
     public static final Color[] BOJE={Color.GREY,Color.PURPLE, Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED};
     
     private Group glavnaGrupa,grupaBlokova;
+    private Zid leviZid,desniZid,gornjiZid;
     private Blok[] blokovi;
     private Udarač udarač;
     private Lopta lopta;
+    private List<Odbijajući> odbijajućiObjekti;
     
     private class Tajmer extends AnimationTimer{
+        private long prethodno=0;
         @Override
         public void handle(long now) {
-            lopta.pomeri();
+            lopta.pomeri(odbijajućiObjekti, (now-prethodno)/1e9f);
+            prethodno=now;
         }
     }
     
@@ -51,9 +59,9 @@ public class RušenjeZida extends Application {
         pozadina.setFill(p);
         glavnaGrupa.getChildren().add(pozadina);
         
-        Zid leviZid=new Zid(0, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY),
-                desniZid=new Zid(ŠIRINA_PROZORA-ŠIRINA_ZIDA, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY),
-                gornjiZid=new Zid(0, 0, ŠIRINA_PROZORA, ŠIRINA_ZIDA, Color.GRAY);
+        leviZid=new Zid(0, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY);
+        desniZid=new Zid(ŠIRINA_PROZORA-ŠIRINA_ZIDA, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY);
+        gornjiZid=new Zid(0, 0, ŠIRINA_PROZORA, ŠIRINA_ZIDA, Color.GRAY);
         glavnaGrupa.getChildren().addAll(leviZid, desniZid, gornjiZid);
         
         grupaBlokova = new Group();
@@ -70,9 +78,16 @@ public class RušenjeZida extends Application {
         udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_PROZORA*0.9, 100, VISINA_BLOKA, Color.ORANGE);
         glavnaGrupa.getChildren().add(udarač);
         
-        lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_PROZORA*0.9-10, 10, Color.BLACK);
+        lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_PROZORA*0.9-POLUPREČNIK_LOPTE, POLUPREČNIK_LOPTE, Color.BLACK);
         lopta.setUdarač(udarač);
         glavnaGrupa.getChildren().add(lopta);
+        
+        odbijajućiObjekti=new ArrayList<>();
+        odbijajućiObjekti.add(leviZid);
+        odbijajućiObjekti.add(desniZid);
+        odbijajućiObjekti.add(gornjiZid);
+        odbijajućiObjekti.add(udarač);
+        odbijajućiObjekti.addAll(Arrays.asList(blokovi));
         
         Scene scene = new Scene(glavnaGrupa, ŠIRINA_PROZORA, VISINA_PROZORA);
         

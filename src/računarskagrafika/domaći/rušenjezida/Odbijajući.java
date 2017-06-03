@@ -1,5 +1,7 @@
 package računarskagrafika.domaći.rušenjezida;
 
+import javafx.scene.shape.Shape;
+
 public interface Odbijajući {
-    void odbijanje();
+    Shape getOblik();
 }

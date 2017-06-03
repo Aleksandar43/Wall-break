@@ -1,6 +1,8 @@
 package računarskagrafika.domaći.rušenjezida;
 
+import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Shape;
 
 public class Zid extends PravougaoniSprite implements Odbijajući{
     public Zid(double x, double y, double širina, double visina, Paint boja) {
@@ -12,8 +14,7 @@ public class Zid extends PravougaoniSprite implements Odbijajući{
     }
 
     @Override
-    public void odbijanje() {
-        
+    public Shape getOblik() {
+        return okvir;
     }
-    
 }
