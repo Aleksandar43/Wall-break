@@ -1,6 +1,5 @@
 package računarskagrafika.domaći.rušenjezida;
 
-import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 

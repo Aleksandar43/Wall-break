@@ -3,13 +3,14 @@ package računarskagrafika.domaći.rušenjezida;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 public class Lopta extends Sprite{
-    private static final double BRZINA=2;
+    private static final double BRZINA=300;
     private Circle oblik;
     private Vektor brzina, pozicija;
     private boolean pokrenuta=false;
@@ -23,7 +24,7 @@ public class Lopta extends Sprite{
         getChildren().add(oblik);
     }
     
-    public void pomeri(List<Odbijajući> odbijajućiObjekti, double protekloVreme){
+    public void pomeri(List<Odbijajući> odbijajućiObjekti, double protekloVreme, Group grupa){
         if(pokrenuta){
             pozicija.setX(pozicija.getX()+brzina.getX()*protekloVreme);
             pozicija.setY(pozicija.getY()+brzina.getY()*protekloVreme);
@@ -48,7 +49,10 @@ public class Lopta extends Sprite{
                             pozicija.setY(2*(granica.getMaxY()+oblik.getRadius())-pozicija.getY());
                         }
                     }
-                    if(oo instanceof Blok) odbijajućiObjekti.remove(oo);
+                    if(oo instanceof Blok){
+                        odbijajućiObjekti.remove(oo);
+                        if(grupa!=null) grupa.getChildren().remove(oo);
+                    }
                 }
             }
             oblik.setTranslateX(pozicija.getX());

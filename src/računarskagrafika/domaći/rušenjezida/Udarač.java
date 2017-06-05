@@ -1,9 +1,7 @@
 package računarskagrafika.domaći.rušenjezida;
 
-import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class Udarač extends PravougaoniSprite implements Odbijajući{
