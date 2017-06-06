@@ -17,10 +17,10 @@ public class Udarač extends PravougaoniSprite implements Odbijajući{
     }
 
     public void pomeri(MouseEvent d, double levaGranica, double desnaGranica){
-        double novoX=d.getSceneX();
-        if(novoX-okvir.getWidth()/2<levaGranica) novoX=levaGranica+okvir.getWidth()/2;
-        if(novoX+okvir.getWidth()/2>desnaGranica) novoX=desnaGranica-okvir.getWidth()/2;
-        setTranslateX(novoX-početnoX);
+        double novoX=d.getSceneX()-okvir.getWidth()/2;
+        if(novoX<levaGranica) novoX=levaGranica;
+        if(novoX+okvir.getWidth()>desnaGranica) novoX=desnaGranica-okvir.getWidth();
+        okvir.setTranslateX(novoX);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class Lopta extends Sprite{
             if(obrniBrzinuY) brzina.setY(-brzina.getY());
 
             } else{
-            oblik.setTranslateX(udarač.getTranslateX()+udarač.getOkvir().getWidth()/2+udarač.getOkvir().getX());
+            oblik.setTranslateX(udarač.getOkvir().getTranslateX()+udarač.getOkvir().getWidth()/2);
         }
     }
     
