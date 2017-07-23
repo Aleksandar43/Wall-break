@@ -27,11 +27,13 @@ public class RušenjeZida extends Application {
             ŠIRINA_ZIDA=(ŠIRINA_PROZORA-ŠIRINA_BLOKA*BROJ_BLOKOVA_U_REDU)/2;*/
             ŠIRINA_ZIDA=20,
             ŠIRINA_PROZORA=ŠIRINA_ZIDA*2+ŠIRINA_BLOKA*BROJ_BLOKOVA_U_REDU,
-            VISINA_PROZORA=480,
+            VISINA_IGRE=480,
+            VISINA_REZULTATA=100,
+            VISINA_PROZORA=VISINA_REZULTATA+VISINA_IGRE,
             POLUPREČNIK_LOPTE=10;
     public static final Color[] BOJE={Color.GREY,Color.PURPLE, Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED};
     
-    private Group glavnaGrupa,grupaBlokova,grupaOdbijajućih;
+    private Group glavnaGrupa,grupaBlokova,grupaOdbijajućih,grupaIgre,grupaRezultata;
     private Zid leviZid,desniZid,gornjiZid;
     private Blok[] blokovi;
     private Udarač udarač;
@@ -52,6 +54,8 @@ public class RušenjeZida extends Application {
     @Override
     public void start(Stage primaryStage) {
         glavnaGrupa=new Group();
+        grupaIgre=new Group();
+        grupaRezultata=new Group();
         
         ImagePattern p=new ImagePattern(new Image("crteži/bg.png"), 0, 0, 40, 40, false);
         
@@ -59,8 +63,8 @@ public class RušenjeZida extends Application {
         pozadina.setFill(p);
         glavnaGrupa.getChildren().add(pozadina);
         
-        leviZid=new Zid(0, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY);
-        desniZid=new Zid(ŠIRINA_PROZORA-ŠIRINA_ZIDA, 0, ŠIRINA_ZIDA, VISINA_PROZORA, Color.GRAY);
+        leviZid=new Zid(0, 0, ŠIRINA_ZIDA, VISINA_IGRE, Color.GRAY);
+        desniZid=new Zid(ŠIRINA_PROZORA-ŠIRINA_ZIDA, 0, ŠIRINA_ZIDA, VISINA_IGRE, Color.GRAY);
         gornjiZid=new Zid(0, 0, ŠIRINA_PROZORA, ŠIRINA_ZIDA, Color.GRAY);
         //glavnaGrupa.getChildren().addAll(leviZid, desniZid, gornjiZid);
         
@@ -75,12 +79,12 @@ public class RušenjeZida extends Application {
         grupaBlokova.setTranslateY(VISINA_BLOKA*5);
         grupaBlokova.setTranslateX(ŠIRINA_ZIDA);
         
-        udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_PROZORA*0.9, 100, VISINA_BLOKA, Color.ORANGE);
+        udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_IGRE*0.9, 100, VISINA_BLOKA, Color.ORANGE);
         //glavnaGrupa.getChildren().add(udarač);
         
-        lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_PROZORA*0.9-POLUPREČNIK_LOPTE, POLUPREČNIK_LOPTE, Color.BLACK);
+        lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_IGRE*0.9-POLUPREČNIK_LOPTE-1, POLUPREČNIK_LOPTE, Color.BLACK);
         lopta.setUdarač(udarač);
-        glavnaGrupa.getChildren().add(lopta);
+        grupaIgre.getChildren().add(lopta);
         
         odbijajućiObjekti=new ArrayList<>();
         odbijajućiObjekti.add(leviZid);
@@ -90,8 +94,11 @@ public class RušenjeZida extends Application {
         odbijajućiObjekti.addAll(Arrays.asList(blokovi));
         grupaOdbijajućih=new Group();
         grupaOdbijajućih.getChildren().addAll(leviZid,desniZid,gornjiZid,udarač,grupaBlokova);
-        glavnaGrupa.getChildren().add(grupaOdbijajućih);
+        grupaIgre.getChildren().add(grupaOdbijajućih);
+        grupaIgre.setTranslateY(VISINA_REZULTATA);
         
+         glavnaGrupa.getChildren().addAll(grupaIgre,grupaRezultata);
+
         Scene scene = new Scene(glavnaGrupa, ŠIRINA_PROZORA, VISINA_PROZORA);
         
         glavnaGrupa.setOnMouseMoved(d -> udarač.pomeri(d, ŠIRINA_ZIDA, ŠIRINA_PROZORA-ŠIRINA_ZIDA));

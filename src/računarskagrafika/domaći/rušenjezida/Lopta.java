@@ -8,9 +8,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+import static računarskagrafika.domaći.rušenjezida.RušenjeZida.VISINA_REZULTATA;
 
 public class Lopta extends Sprite{
-    private static final double BRZINA=300;
+    private static final double BRZINA=2;
     private Circle oblik;
     private Vektor brzina, pozicija;
     private boolean pokrenuta=false;
@@ -26,8 +27,8 @@ public class Lopta extends Sprite{
     
     public void pomeri(List<Odbijajući> odbijajućiObjekti, double protekloVreme, Group grupa){
         if(pokrenuta){
-            pozicija.setX(pozicija.getX()+brzina.getX()*protekloVreme);
-            pozicija.setY(pozicija.getY()+brzina.getY()*protekloVreme);
+            pozicija.setX(pozicija.getX()+brzina.getX());//*protekloVreme);
+            pozicija.setY(pozicija.getY()+brzina.getY());//*protekloVreme);
             boolean obrniBrzinuX=false,obrniBrzinuY=false;
             for(Odbijajući oo : new ArrayList<Odbijajući>(odbijajućiObjekti)){
                 Shape o=oo.getOblik();
@@ -56,7 +57,7 @@ public class Lopta extends Sprite{
                 }
             }
             oblik.setTranslateX(pozicija.getX());
-            oblik.setTranslateY(pozicija.getY());
+            oblik.setTranslateY(pozicija.getY()-VISINA_REZULTATA);
             if(obrniBrzinuX) brzina.setX(-brzina.getX());
             if(obrniBrzinuY) brzina.setY(-brzina.getY());
 
@@ -67,12 +68,12 @@ public class Lopta extends Sprite{
     
     public void pokreni(){
         if (!pokrenuta) {
-            pozicija = new Vektor(oblik.getTranslateX(), oblik.getTranslateY());
+            pozicija = new Vektor(oblik.getTranslateX(), oblik.getTranslateY()+VISINA_REZULTATA);
             double ugao = (2 * Math.PI) / 360 * (Math.random() * 120 + 210);
             brzina = new Vektor(BRZINA * Math.cos(ugao), BRZINA * Math.sin(ugao));
             pokrenuta = true;
         }
-    }
+}
 
     public Udarač getUdarač() {
         return udarač;
