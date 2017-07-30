@@ -11,7 +11,7 @@ import javafx.scene.shape.Shape;
 import static računarskagrafika.domaći.rušenjezida.RušenjeZida.VISINA_REZULTATA;
 
 public class Lopta extends Sprite{
-    private static final double BRZINA=2;
+    private static final double BRZINA=4;
     private Circle oblik;
     private Vektor brzina, pozicija;
     private boolean pokrenuta=false;

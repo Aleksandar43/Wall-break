@@ -8,12 +8,16 @@ import java.util.Arrays;
 import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class RušenjeZida extends Application {
@@ -33,19 +37,38 @@ public class RušenjeZida extends Application {
             POLUPREČNIK_LOPTE=10;
     public static final Color[] BOJE={Color.GREY,Color.PURPLE, Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED};
     
-    private Group glavnaGrupa,grupaBlokova,grupaOdbijajućih,grupaIgre,grupaRezultata;
+    private Group glavnaGrupa,grupaBlokova,grupaOdbijajućih,grupaIgre;
+    private Group grupaRezultata;
+    private GridPane vBoxRezultata;
     private Zid leviZid,desniZid,gornjiZid;
     private Blok[] blokovi;
     private Udarač udarač;
     private Lopta lopta;
     private List<Odbijajući> odbijajućiObjekti;
+    private Text tekstKonst, tekstVreme;
     
     private class Tajmer extends AnimationTimer{
         private long prethodno=0;
         @Override
         public void handle(long now) {
             lopta.pomeri(odbijajućiObjekti, (now-prethodno)/1e9f, grupaBlokova);
+            prikazVremena(now);
             prethodno=now;
+        }
+    }
+    
+    private int frejmovi=0;
+    private boolean pokrenuta=false;
+    private long početnoVreme;
+    private void prikazVremena(long now){
+        if (pokrenuta) {
+            long trenutnoVreme=now-početnoVreme;
+            //Integer parseInt = Integer.parseInt(tekstVreme.getText());
+            //parseInt++;
+            tekstVreme.setText(""+trenutnoVreme);
+            if(odbijajućiObjekti.size()<=4) tajmer.stop();
+        } else {
+            početnoVreme=now;
         }
     }
     
@@ -97,12 +120,31 @@ public class RušenjeZida extends Application {
         grupaIgre.getChildren().add(grupaOdbijajućih);
         grupaIgre.setTranslateY(VISINA_REZULTATA);
         
-         glavnaGrupa.getChildren().addAll(grupaIgre,grupaRezultata);
+        Rectangle pozadinaRezultata=new Rectangle(0, 0, ŠIRINA_PROZORA, VISINA_REZULTATA);
+        pozadinaRezultata.setFill(Color.BLACK);
+        grupaRezultata.getChildren().add(pozadinaRezultata);
+        //Text tekstKonst=new Text(ŠIRINA_PROZORA/2,20,"Vreme:\n");
+        //Text tekstVreme=new Text(ŠIRINA_PROZORA/2,10,"0:00:00");
+        tekstKonst=new Text("Vreme");
+        tekstVreme=new Text("0");
+        tekstKonst.setFill(Color.WHITE);
+        tekstVreme.setFill(Color.WHITE);
+        vBoxRezultata=new GridPane();
+        vBoxRezultata.setPrefSize(ŠIRINA_PROZORA, VISINA_REZULTATA);
+        //vBoxRezultata.setMaxSize(ŠIRINA_PROZORA, VISINA_REZULTATA);
+        vBoxRezultata.setAlignment(Pos.CENTER);
+        vBoxRezultata.add(tekstKonst, 1, 0);
+        vBoxRezultata.add(tekstVreme, 1, 1);
+        GridPane.setHalignment(tekstKonst, HPos.CENTER);
+        GridPane.setHalignment(tekstVreme, HPos.CENTER);
+        grupaRezultata.getChildren().add(vBoxRezultata);
+        
+        glavnaGrupa.getChildren().addAll(grupaIgre,grupaRezultata);
 
         Scene scene = new Scene(glavnaGrupa, ŠIRINA_PROZORA, VISINA_PROZORA);
         
         glavnaGrupa.setOnMouseMoved(d -> udarač.pomeri(d, ŠIRINA_ZIDA, ŠIRINA_PROZORA-ŠIRINA_ZIDA));
-        glavnaGrupa.setOnMouseClicked(d -> lopta.pokreni());
+        glavnaGrupa.setOnMouseClicked(d -> {lopta.pokreni(); pokrenuta=true;});
         
         primaryStage.setTitle("Rušenje zida");
         primaryStage.setResizable(false);
