@@ -57,15 +57,22 @@ public class RušenjeZida extends Application {
         }
     }
     
-    private int frejmovi=0;
     private boolean pokrenuta=false;
     private long početnoVreme;
     private void prikazVremena(long now){
         if (pokrenuta) {
             long trenutnoVreme=now-početnoVreme;
-            //Integer parseInt = Integer.parseInt(tekstVreme.getText());
-            //parseInt++;
-            tekstVreme.setText(""+trenutnoVreme);
+            int sekundi=(int) (trenutnoVreme/1e9);
+            int minuta=sekundi/60;
+            sekundi=sekundi%60;
+            int stotinki=(int) (trenutnoVreme/1e7) % 100;
+            String s=minuta+":";
+            if(sekundi<=9) s+="0"+sekundi;
+            else s+=sekundi;
+            s+=".";
+            if(stotinki<=9) s+="0"+stotinki;
+            else s+=stotinki;
+            tekstVreme.setText(s);
             if(odbijajućiObjekti.size()<=4) tajmer.stop();
         } else {
             početnoVreme=now;
@@ -126,7 +133,7 @@ public class RušenjeZida extends Application {
         //Text tekstKonst=new Text(ŠIRINA_PROZORA/2,20,"Vreme:\n");
         //Text tekstVreme=new Text(ŠIRINA_PROZORA/2,10,"0:00:00");
         tekstKonst=new Text("Vreme");
-        tekstVreme=new Text("0");
+        tekstVreme=new Text("0:00.00");
         tekstKonst.setFill(Color.WHITE);
         tekstVreme.setFill(Color.WHITE);
         vBoxRezultata=new GridPane();
