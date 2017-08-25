@@ -53,6 +53,14 @@ public class RušenjeZida extends Application {
         public void handle(long now) {
             lopta.pomeri(odbijajućiObjekti, (now-prethodno)/1e9f, grupaBlokova);
             prikazVremena(now);
+            if(odbijajućiObjekti.size()<=4){
+                tekstKonst.setText("Bravo!");
+                tajmer.stop();
+            }
+            if(lopta.vanIgre()){
+                tekstKonst.setText("Izgubili ste");
+                tajmer.stop();
+            }
             prethodno=now;
         }
     }
@@ -73,7 +81,6 @@ public class RušenjeZida extends Application {
             if(stotinki<=9) s+="0"+stotinki;
             else s+=stotinki;
             tekstVreme.setText(s);
-            if(odbijajućiObjekti.size()<=4) tajmer.stop();
         } else {
             početnoVreme=now;
         }
@@ -96,7 +103,6 @@ public class RušenjeZida extends Application {
         leviZid=new Zid(0, 0, ŠIRINA_ZIDA, VISINA_IGRE, Color.GRAY);
         desniZid=new Zid(ŠIRINA_PROZORA-ŠIRINA_ZIDA, 0, ŠIRINA_ZIDA, VISINA_IGRE, Color.GRAY);
         gornjiZid=new Zid(0, 0, ŠIRINA_PROZORA, ŠIRINA_ZIDA, Color.GRAY);
-        //glavnaGrupa.getChildren().addAll(leviZid, desniZid, gornjiZid);
         
         grupaBlokova = new Group();
         blokovi = new Blok[BROJ_BLOKOVA_U_REDU*BROJ_BLOKOVA_U_KOLONI];
@@ -105,12 +111,10 @@ public class RušenjeZida extends Application {
                     ŠIRINA_BLOKA, VISINA_BLOKA, BOJE[i/BROJ_BLOKOVA_U_REDU]);
             grupaBlokova.getChildren().add(blokovi[i]);
         }
-        //glavnaGrupa.getChildren().add(grupaBlokova);
         grupaBlokova.setTranslateY(VISINA_BLOKA*5);
         grupaBlokova.setTranslateX(ŠIRINA_ZIDA);
         
         udarač=new Udarač(ŠIRINA_PROZORA/2-50, VISINA_IGRE*0.9, 100, VISINA_BLOKA, Color.ORANGE);
-        //glavnaGrupa.getChildren().add(udarač);
         
         lopta=new Lopta(ŠIRINA_PROZORA/2, VISINA_IGRE*0.9-POLUPREČNIK_LOPTE-1, POLUPREČNIK_LOPTE, Color.BLACK);
         lopta.setUdarač(udarač);
@@ -130,8 +134,6 @@ public class RušenjeZida extends Application {
         Rectangle pozadinaRezultata=new Rectangle(0, 0, ŠIRINA_PROZORA, VISINA_REZULTATA);
         pozadinaRezultata.setFill(Color.BLACK);
         grupaRezultata.getChildren().add(pozadinaRezultata);
-        //Text tekstKonst=new Text(ŠIRINA_PROZORA/2,20,"Vreme:\n");
-        //Text tekstVreme=new Text(ŠIRINA_PROZORA/2,10,"0:00:00");
         tekstKonst=new Text("Vreme");
         tekstVreme=new Text("0:00.00");
         tekstKonst.setFill(Color.WHITE);

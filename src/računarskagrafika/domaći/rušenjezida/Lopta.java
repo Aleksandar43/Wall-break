@@ -9,6 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import static računarskagrafika.domaći.rušenjezida.RušenjeZida.VISINA_REZULTATA;
+import static računarskagrafika.domaći.rušenjezida.RušenjeZida.VISINA_IGRE;
 
 public class Lopta extends Sprite{
     private static final double BRZINA=4;
@@ -61,7 +62,7 @@ public class Lopta extends Sprite{
             if(obrniBrzinuX) brzina.setX(-brzina.getX());
             if(obrniBrzinuY) brzina.setY(-brzina.getY());
 
-            } else{
+        } else{
             oblik.setTranslateX(udarač.getOkvir().getTranslateX()+udarač.getOkvir().getWidth()/2);
         }
     }
@@ -81,5 +82,9 @@ public class Lopta extends Sprite{
 
     public void setUdarač(Udarač udarač) {
         this.udarač = udarač;
+    }
+
+    boolean vanIgre() {
+        return oblik.getTranslateY()>VISINA_IGRE;
     }
 }
